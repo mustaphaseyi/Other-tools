@@ -1,0 +1,57 @@
+Open the .bashrc file in the user directory with any text editor:
+
+1
+gedit ~/.bashrc
+And to create new environment variables, add the following lines to this file:
+
+1
+2
+3
+export GOPATH=/home/git/go
+export GOROOT=/usr/local/src/go
+export PATH=${PATH}:$GOROOT/bin:/home/git/go/bin
+When you are ready, save your changes and close the file.
+
+These changes will take effect after the reboot. Instead of restarting the computer, run:
+
+1
+source ~/.bashrc
+The following command automatically detects and downloads the latest version of the Go language files:
+1
+wget `curl -s https://golang.org/dl/ | grep -E -o 'https://[a-z0-9./]{5,}go[0-9.]{3,}linux-amd64.tar.gz' | head -n 1`
+Extract the downloaded archive:
+
+1
+tar zxf go*.linux-amd64.tar.gz
+Move files to $GOROOT, which we specified in ~/.bashrc.
+1
+sudo mv go $GOROOT
+Now type in the terminal:
+
+go
+
+As well install the git and make packages:
+
+On Kali Linux, Debian, Ubuntu, Linux Mint and derivatives:
+1
+sudo apt install git make
+On Arch Linux, BlackArch and derivatives:
+1
+sudo pacman -S git make
+After then type:
+
+1
+2
+3
+4
+go get -u github.com/kgretzky/evilginx2
+cd $GOPATH/src/github.com/kgretzky/evilginx2
+make
+sudo make install
+
+sudo evilginx
+
+wget -O extra.zip https://github.com/hash3liZer/phishlets/archive/master.zip
+unzip extra.zip
+sudo mv phishlets-master/* /usr/share/evilginx/phishlets/
+rm -rf extra.zip phishlets-master/
