@@ -1,0 +1,71 @@
+############################################################################
+# BEGIN: USERS/VIRTUAL-MTA / VIRTUAL-MTA-POOL / VIRTUAL-PMTA-PATTERN
+############################################################################
+
+<smtp-user pmtauser>
+        password 
+        source {pmta-auth}
+</smtp-user>
+<source {pmta-auth}>
+        smtp-service yes
+        always-allow-relaying yes
+        require-auth true
+        process-x-virtual-mta yes
+        default-virtual-mta pmta-pool
+        remove-received-headers true
+        add-received-header false
+        hide-message-source true
+        #pattern-list pmta-pattern
+process-x-job false
+</source>
+<smtp-user pmta-pattern>
+        password 
+        source {pmta-pattern-auth}
+</smtp-user>
+
+<source {pmta-pattern-auth}>
+        smtp-service yes
+        always-allow-relaying yes
+        require-auth true
+        process-x-virtual-mta yes
+        #default-virtual-mta pmta-pool
+        remove-received-headers true
+        add-received-header false
+        hide-message-source true
+        pattern-list pmta-pattern
+process-x-job false
+</source>
+
+########################################################################################
+### START BLOK - 1 #####################################################################
+########################################################################################
+
+#BEGIN VIRTUAL MTAS 
+<virtual-mta pmta-vmta1>
+smtp-source-host 212.6.44.198 warztr.xyz
+domain-key dkim,*,/etc/pmta/dkim.pem
+<domain *>
+dkim-sign yes
+use-starttls yes
+require-starttls no
+max-msg-rate 400/h
+</domain>
+</virtual-mta> <domain warztr.xyz>
+smtp-hosts [212.6.44.198]:587
+</domain>
+#END VIRTUAL MTAS
+
+<virtual-mta-pool pmta-pool> 
+virtual-mta pmta-vmta1
+</virtual-mta-pool>
+
+### END BLOK - 1 #######################################################################
+
+########################################################################################
+### START BLOK - 2 #####################################################################
+########################################################################################
+
+<pattern-list pmta-pattern> 
+</pattern-list>
+
+### END BLOK - 2 #######################################################################
